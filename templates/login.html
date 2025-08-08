@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOME</title>
+</head>
+<body>
+
+    {%set message = get_flashed_messages() %}
+    {% if message %}
+        <div class="alert alert-warning" role="alert">
+            {{ message[0] }}
+        </div>
+    {% endif %}
+
+    <div id="form_fundo">
+        <h1>LOGIN</h1>
+        <H1>@kevenigor</H1>
+        <div id="form_frente">
+    <form action="/login" id="login" method="post">
+        <label for="matricula">matricula</label>
+        <input type="text" name="matricula" id="matricula" required placeholder="digite sua matricula><br><br>
+        <label for="senha"  id="senha">senha</label>
+        <input type="password" name="senha" id="senha" required placeholder="digite sua senha"> <br><br>
+        <button type="submit" id="btn-login">Login
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>Entrar
+
+        </button>
+    </form>
+<div>  
+</div>
+
+</body>
+</html>
