@@ -1,27 +1,69 @@
-from flask import Flask, render_template, redirect, request, flash
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from models import Usuario
+from db import db
+import hashlib
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'pizza'
+app.secret_key = 'pizza'
+im = LoginManager(app)
+im.login_view = 'login'
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"
+db.init_app(app)
 
+def hash(txt):
+    hash_obj = hashlib.sha256(txt.encode('utf-8'))
+    return hash_obj.hexdigest()
+print(hash('oi'))
+
+@im.user_loader
+def load_user(id):
+    Usuario = db.ssession.querey(Usuario).filter_by(id=id).first()
+    return Usuario
 
 @app.route('/')
 def home():
-    return render_template('login.html')
+    return render_template('home.html')
 
-
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    matricula = request.form.get('matricula')
-    senha = request.form.get('senha')
+    
+    if request.method == 'GET':
+        return render_template('login.html')
+    elif request.method == 'POST':
+        nome = request.form['nomeForm']
+        senha = request.form['senhaForm']
+        user = db.session.query(Usuario).filter_by(nome=nome , senha=senha).first()
+        if not user:
+            return 'nome ou senha incorretos'
+        load_user(Usuario)
+        return redirect(url_for('home'))
 
-    if matricula == 'igo' and senha == '123':
-        return render_template('usuario.html')
-    else:
-        flash('USUARIO INVALIDO')
+
+@app.route('/registrar', methods=['GET', 'POST'])
+def registrar():
+    if request.method == 'GET':
+        return render_template('registrar.html')
+    elif request.method == 'POST':
+        nome = request.form['nomeForm']
+        senha = request.form['senhaForm']
+
+        novo_usuario = Usuario(nome=nome, senha= hash(senha))
+        db.session.add(novo_usuario)
+        db.session.commit()
         
-        
-        return redirect('/')
+        login_user(novo_usuario)
+
+    return redirect(url_for('home'))
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(debug=True)
