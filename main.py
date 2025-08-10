@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
-from models import mensagem
+from flask_login import LoginManager, login_user, login_required, logout_user,current_user
 from models import Usuario
 from db import db
 import hashlib
@@ -37,6 +36,10 @@ def abrir_chamados():
 @app.route('/opcoes')
 def opcoes():
     return render_template('opcoes.html')  # renderiza a página de opções
+
+@app.route('/enviar_mensagem')
+def enviar_mensagem():
+    return render_template('meus_chamados.html')
 
 @app.route('/envia_mensagem', methods=['GET', 'POST'])
 def envia_mensagem():
