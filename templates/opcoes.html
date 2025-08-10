@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Opções de Setores</title>
+</head>
+<body>
+  <h1>Escolha o setor para abrir o chamado:</h1>
+  <ul>
+   <li><a href="{{ url_for('envia_mensagem', area='comunicacao') }}">Comunicação Social e Eventos</a></li>
+  <li><a href="{{ url_for('envia_mensagem', area='ead') }}">EaD e Tecnologias Educacionais</a></li>
+  <li><a href="{{ url_for('envia_mensagem', area='ensino') }}">Ensino</a></li>
+  <li><a href="{{ url_for('envia_mensagem', area='manutencao') }}">Manutenção Predial</a></li>
+  <li><a href="{{ url_for('envia_mensagem', area='pesquisa') }}">Pesquisa, Pós Graduação e Inovação</a></li>
+  <li><a href="{{ url_for('envia_mensagem', area='ti') }}">Tecnologia da Informação</a></li>
+  </ul>
+</body>
+</html>

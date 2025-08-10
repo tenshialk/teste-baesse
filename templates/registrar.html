@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>registrar</title>
 </head>
 <body>
-    <form action="" method="post">
-        Nome: <input type="text" name="nomeForm" id=""><br>
-        Senha: <input type="password" name="senhaForm" id=""><br>
-        <input type="submit" value="Cadastrar">
-    </form>
+    <form action="{{ url_for('registrar') }}" method="POST">
+    Matrícula: <input type="text" name="matriculaForm" id="matricula" required><br>
+    Senha: <input type="password" name="senhaForm" id="senha" required><br>
+    <input type="submit" value="Registrar">
+</form>
 </body>
 </html>

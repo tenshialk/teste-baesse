@@ -1,17 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal de Reclamações - IFRN-ZN</title>
 </head>
 <body>
-
-    {% if current_user.is_authenticated %}
-    <h1>Você está logado. Olá, {{current_user.nome}}!</h1>
-    {% else %}
-    <h1>Você não está logado.</h1>
-    {% endif %}
-
+  <header class="hero">
+    <nav class="navbar">
+      <ul>
+        <li><a href="/sobre">Sobre</a></li>
+        <li><a href="/contatos">Contatos</a></li>
+        {% if current_user.is_authenticated %}
+          <li>Olá, {{ current_user.nome }}!</li>
+          <li><a href="/logout">Sair</a></li>
+        {% else %}
+          <button><a href="/login">Entrar</a></button>
+        {% endif %}
+      </ul>
+    </nav>
+    <div class="hero-content">
+      {% if current_user.is_authenticated %}
+      {% else %}
+      {% endif %}
+      <p>
+        Portal de Reclamações do IFRN-ZN: plataforma exclusiva para registrar,
+        acompanhar e resolver reclamações, sugestões ou denúncias relacionadas
+        ao campus, garantindo anonimato, transparência e melhoria contínua.
+      </p>
+    </div>
+  </header>
 </body>
 </html>
