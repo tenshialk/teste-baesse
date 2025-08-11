@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
+import os
 from flask_login import LoginManager, login_user, login_required, logout_user,current_user
 from models import Usuario
+from chamados import Chamado
 from db import db
 import hashlib
 
@@ -33,22 +35,35 @@ def pagina_principal():
 def abrir_chamados():
     return render_template('opcoes.html')
 
+@app.route('/meus_chamados')
+def meus_chamados():
+    chamados = Chamado.query.filter_by(usuario_id = 1)
+    return render_template('meus_chamados.html',chamados = chamados)
+
 @app.route('/enviar_mensagem', methods=['GET', 'POST'])
 def enviar_mensagem():
     if request.method == 'POST':
-        matricula = request.form.get('formMatricula')
-        senha = request.form.get('formSenha')
+                
+        categoria = request.form.get('formcategoria')
+        mensagem = request.form.get('formmensagem')
+        matricula = request.form.get('formatricula')
+           
         anexo = request.files.get('formAnexo')
-
-        print(f"Matrícula: {matricula}")
-        print(f"Senha: {senha}")
-
+        print(anexo.filename)
+        print(mensagem)
+        print(categoria)
         # Salvar arquivo se enviado
         if anexo and anexo.filename != '':
             caminho = os.path.join('uploads', anexo.filename)
+            print(caminho)
             anexo.save(caminho)
             print(f"Arquivo salvo em: {caminho}")
-
+        
+            chamado = Chamado(usuario_id = 1 ,  categoria = categoria , anexo = caminho , mensagem = mensagem , matricula = matricula  )
+        else:
+            chamado = Chamado(usuario_id = 1 ,  categoria = categoria ,  mensagem = mensagem, matricula = matricula )
+        db.session.add(chamado)
+        db.session.commit()
         return "Cadastro enviado com sucesso!"
     return render_template('enviar_mensagem.html')
 
@@ -60,14 +75,10 @@ def login():
     elif request.method == 'POST':
         matricula = request.form['matriculaForm']
         senha = request.form['senhaForm']
-        if not matricula or not matricula.startswith("2021"):
-            flash('Senha inválida', 'error')
-        senha = hash(senha)
-        user = db.session.query(Usuario).filter_by(matricula=matricula , senha=senha).first()
-        if not user:
-            return redirect(url_for('pagina_principal'))
-        load_user(Usuario)
-
+        print(matricula.startswith('2021',))
+        if matricula.startswith("2021"):
+            return render_template('pagina_principal.html')
+        return render_template('login.html')
 
 @app.route('/registrar', methods=['GET', 'POST'])
 def registrar():
