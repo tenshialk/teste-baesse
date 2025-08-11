@@ -33,8 +33,23 @@ def pagina_principal():
 def abrir_chamados():
     return render_template('opcoes.html')
 
-@app.route('/enviar_mensagem', methods=['GET','POST'] )
+@app.route('/enviar_mensagem', methods=['GET', 'POST'])
 def enviar_mensagem():
+    if request.method == 'POST':
+        matricula = request.form.get('formMatricula')
+        senha = request.form.get('formSenha')
+        anexo = request.files.get('formAnexo')
+
+        print(f"Matrícula: {matricula}")
+        print(f"Senha: {senha}")
+
+        # Salvar arquivo se enviado
+        if anexo and anexo.filename != '':
+            caminho = os.path.join('uploads', anexo.filename)
+            anexo.save(caminho)
+            print(f"Arquivo salvo em: {caminho}")
+
+        return "Cadastro enviado com sucesso!"
     return render_template('enviar_mensagem.html')
 
 
