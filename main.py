@@ -31,28 +31,15 @@ def pagina_principal():
 
 @app.route('/abrir_chamados')
 def abrir_chamados():
-    return redirect(url_for('opcoes'))
+    return render_template('opcoes.html')
 
-@app.route('/opcoes')
-def opcoes():
-    return render_template('opcoes.html')  # renderiza a página de opções
-
-@app.route('/enviar_mensagem')
+@app.route('/enviar_mensagem', methods=['GET','POST'] )
 def enviar_mensagem():
-    return render_template('meus_chamados.html')
+    return render_template('enviar_mensagem.html')
 
-@app.route('/envia_mensagem', methods=['GET', 'POST'])
-def envia_mensagem():
-    area = request.args.get('area', 'geral')
-    if request.method == 'GET':
-        return render_template('envia_mensagem.html', area=area)
-    else:
-        # lógica para salvar mensagem
-        return redirect(url_for('pagina_principal'))
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=[ 'POST', 'GET'])
 def login():
-    
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
